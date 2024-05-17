@@ -1,8 +1,6 @@
 import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import ToggleButton from "@mui/material/ToggleButton";
@@ -16,7 +14,7 @@ export default function TodoList() {
     <Container maxWidth="sm">
       <Card sx={{ minWidth: 275 }}>
         <CardContent>
-          <Typography variant="h2" color="text.secondary" gutterBottom>
+          <Typography variant="h2" gutterBottom>
             مهامي
           </Typography>
           <Divider />
@@ -36,6 +34,8 @@ export default function TodoList() {
 
           {/* Start ALL TODOS */}
           <Todo />
+          <Todo />
+
           {/* ====== End ALL TODOS */}
         </CardContent>
       </Card>

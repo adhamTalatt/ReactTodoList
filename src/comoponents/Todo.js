@@ -15,6 +15,7 @@ export default function Todo() {
   return (
     <div>
       <Card
+        className="todoCard"
         sx={{
           minWidth: 275,
           background: "#283593",
@@ -37,28 +38,31 @@ export default function Todo() {
               alignItems="center"
             >
               <IconButton
+                className="iconButton"
                 sx={{
                   color: "#8bc34a",
                   background: "white",
-                  border: "3px solid #8bc34a ",
+                  border: "3px solid #8bc34a",
                 }}
               >
                 <CheckIcon />
               </IconButton>
               <IconButton
+                className="iconButton"
                 sx={{
-                  color: "#8bc34a",
+                  color: "#1769aa",
                   background: "white",
-                  border: "3px solid #8bc34a ",
+                  border: "3px solid #1769aa",
                 }}
               >
                 <EditIcon />
               </IconButton>
               <IconButton
+                className="iconButton"
                 sx={{
-                  color: "red",
+                  color: "#b23c17",
                   background: "white",
-                  border: "3px solid red ",
+                  border: "3px solid #b23c17",
                 }}
               >
                 <DeleteIcon />
