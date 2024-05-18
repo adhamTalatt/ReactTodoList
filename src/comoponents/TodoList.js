@@ -1,3 +1,4 @@
+// From Material Ui
 import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -6,15 +7,60 @@ import Divider from "@mui/material/Divider";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
+// this library from npm for hlep you to dealing with (id) in objet or anything else
+import { v4 as uuidv4 } from "uuid";
+
 // Components
 import Todo from "./Todo";
+import AddToDO from "./AddToDo";
 
 export default function TodoList() {
+  const { v4: uuidv4 } = require("uuid");
+  const toDos = [
+    {
+      id: uuidv4(),
+      title: "قرائة كتاب",
+      details: "شسيشسيشسيشسيشسيشسيشسيشسيشس",
+      isCompleted: false,
+    },
+    {
+      id: uuidv4(),
+      title: "ممارسةالرياضة",
+      details: "شسيشسيشسيشسيشسيشسيشسيشسيشس",
+      isCompleted: false,
+    },
+    {
+      id: uuidv4(),
+      title: "تعلم شئ جديد",
+      details:
+        "شdsfdsfsdfsdfsdfsdfsdfsdسيشسيشسي شسيشسdgdfgdfgdfgdfgdfgيشسيشسيشسيشس",
+      isCompleted: false,
+    },
+    {
+      id: uuidv4(),
+      title: "الصلاة",
+      details: "شسيشسيشسيشسيشسيشسيشسيشسيشس",
+      isCompleted: false,
+    },
+  ];
+  const showToDos = toDos.map((e) => {
+    return (
+      <Todo
+        key={e.id}
+        title={e.title}
+        detail={e.details}
+        isComplet={e.isCompleted}
+      />
+    );
+  });
   return (
     <Container maxWidth="sm">
       <Card sx={{ minWidth: 275 }}>
         <CardContent>
-          <Typography variant="h2" gutterBottom>
+          <Typography
+            variant="h2"
+            style={{ fontWeight: "700", marginBottom: "30px" }}
+          >
             مهامي
           </Typography>
           <Divider />
@@ -23,7 +69,7 @@ export default function TodoList() {
             style={{ direction: "ltr", marginTop: "30px" }}
             value={""}
             exclusive
-            onChange={""}
+            onChange={() => {}}
             aria-label="text alignment"
           >
             <ToggleButton value="right"> غير منجز</ToggleButton>
@@ -33,10 +79,12 @@ export default function TodoList() {
           {/* ====== End Toggle Button */}
 
           {/* Start ALL TODOS */}
-          <Todo />
-          <Todo />
-
+          {showToDos}
           {/* ====== End ALL TODOS */}
+
+          {/* ====== Start ADD TO DO*/}
+          <AddToDO />
+          {/* ====== End ADD TO DO */}
         </CardContent>
       </Card>
     </Container>

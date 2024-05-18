@@ -11,7 +11,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 
-export default function Todo() {
+export default function Todo(props) {
   return (
     <div>
       <Card
@@ -28,7 +28,18 @@ export default function Todo() {
             <Grid xs={8}>
               {" "}
               <Typography variant="h5" sx={{ textAlign: "right" }}>
-                المهمة الاولي
+                {props.title}
+              </Typography>
+              <Typography
+                paragraph={true}
+                wrapped
+                style={{
+                  textAlign: "right",
+                  width: "100% ",
+                  // wordBreak: "break-all",
+                }}
+              >
+                {props.detail}
               </Typography>
             </Grid>
             <Grid
