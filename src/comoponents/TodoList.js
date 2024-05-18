@@ -26,18 +26,6 @@ const toDoList = [
     details: "تفاصيل المهمة الاولي ",
     isCompleted: false,
   },
-  {
-    id: uuidv4(),
-    title: "المهمة الثانية",
-    details: " تفاصيل المهم الثانية",
-    isCompleted: false,
-  },
-  {
-    id: uuidv4(),
-    title: "المهمة الثاله",
-    details: "تفاصل تفاصيل المهم الثانية",
-    isCompleted: false,
-  },
 ];
 export default function TodoList() {
   const [toDos, setToDos] = useState(toDoList);
