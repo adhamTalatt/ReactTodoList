@@ -12,46 +12,59 @@ import { v4 as uuidv4 } from "uuid";
 
 // Components
 import Todo from "./Todo";
-import AddToDO from "./AddToDo";
+import Grid from "@mui/material/Unstable_Grid2";
+// for import textinput from Materl UL
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
+import { useState } from "react";
+
+const toDoList = [
+  {
+    id: uuidv4(),
+    title: "المهمة الاولي",
+    details: "تفاصيل المهمة الاولي ",
+    isCompleted: false,
+  },
+  {
+    id: uuidv4(),
+    title: "المهمة الثانية",
+    details: " تفاصيل المهم الثانية",
+    isCompleted: false,
+  },
+  {
+    id: uuidv4(),
+    title: "المهمة الثاله",
+    details: "تفاصل تفاصيل المهم الثانية",
+    isCompleted: false,
+  },
+];
 export default function TodoList() {
-  const { v4: uuidv4 } = require("uuid");
-  const toDos = [
-    {
-      id: uuidv4(),
-      title: "قرائة كتاب",
-      details: "شسيشسيشسيشسيشسيشسيشسيشسيشس",
-      isCompleted: false,
-    },
-    {
-      id: uuidv4(),
-      title: "ممارسةالرياضة",
-      details: "شسيشسيشسيشسيشسيشسيشسيشسيشس",
-      isCompleted: false,
-    },
-    {
-      id: uuidv4(),
-      title: "تعلم شئ جديد",
-      details: "سيشسdgdfgdfgdfgdfgdfgيشسيشسيشسيشس",
-      isCompleted: false,
-    },
-    {
-      id: uuidv4(),
-      title: "الصلاة",
-      details: "شسيشسيشسيشسيشسيشسيشسيشسيشس",
-      isCompleted: false,
-    },
-  ];
-  const showToDos = toDos.map((e) => {
+  const [toDos, setToDos] = useState(toDoList);
+  const [titleInput, setTitleIput] = useState("");
+
+  let showToDos = toDos.map((e) => {
     return (
       <Todo
         key={e.id}
         title={e.title}
-        detail={e.details}
-        isComplet={e.isCompleted}
+        details={e.details}
+        isCompleted={e.isCompleted}
       />
     );
   });
+
+  function handleClickbtn() {
+    const netTodo = {
+      id: uuidv4(),
+      title: titleInput,
+      details: "",
+      isCompleted: false,
+    };
+    setToDos([...toDos, netTodo]);
+    setTitleIput("");
+  }
+
   return (
     <Container maxWidth="sm">
       <Card sx={{ minWidth: 275 }}>
@@ -82,7 +95,33 @@ export default function TodoList() {
           {/* ====== End ALL TODOS */}
 
           {/* ====== Start ADD TO DO*/}
-          <AddToDO />
+          <Grid container sx={{ marginTop: "20px" }} spacing={2}>
+            <Grid xs={8}>
+              <TextField
+                sx={{ width: "100%" }}
+                id="outlined-password-input"
+                label="اضاقة مهامة"
+                value={titleInput}
+                onChange={(event) => {
+                  setTitleIput(event.target.value);
+                }}
+              />
+            </Grid>
+            <Grid xs={4}>
+              <Button
+                onClick={() => {
+                  handleClickbtn();
+                }}
+                variant="contained"
+                style={{
+                  height: "100%",
+                  width: "100%",
+                }}
+              >
+                اضافة
+              </Button>
+            </Grid>
+          </Grid>
           {/* ====== End ADD TO DO */}
         </CardContent>
       </Card>
