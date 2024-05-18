@@ -32,8 +32,7 @@ export default function TodoList() {
     {
       id: uuidv4(),
       title: "تعلم شئ جديد",
-      details:
-        "شdsfdsfsdfsdfsdfsdfsdfsdسيشسيشسي شسيشسdgdfgdfgdfgdfgdfgيشسيشسيشسيشس",
+      details: "سيشسdgdfgdfgdfgdfgdfgيشسيشسيشسيشس",
       isCompleted: false,
     },
     {
