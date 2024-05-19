@@ -11,9 +11,46 @@ import CheckIcon from "@mui/icons-material/Check";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 
-export default function Todo({ title, details }) {
+//Context
+import { useContext } from "react";
+import { ContextToDoList } from "../contexts/ContextTodoList";
+
+import { useState } from "react";
+import DeleteCheck from "./DeleteCheck";
+import EditTodo from "./EditTodo";
+export default function Todo({ todo }) {
+  const { toDos, setToDos } = useContext(ContextToDoList);
+  const [deletCheckOpen, setdeletCheckOpen] = useState(false);
+
+  // Handle Event Functions
+
+  function handleClose() {
+    setdeletCheckOpen(false);
+  }
+  function handleDeleteConfirm() {
+    const updatedTodo = toDos.filter((t) => {
+      if (t.id == todo.id) {
+        return false;
+      } else {
+        return true;
+      }
+    });
+    setToDos(updatedTodo);
+  }
+  function handleCheckClick() {
+    const udatedTodos = toDos.map((e) => {
+      if (e.id == todo.id) {
+        e.isCompleted = !e.isCompleted;
+      }
+      return e;
+    });
+
+    setToDos(udatedTodos);
+  }
+  // ======= Handle Event Functions ======
+
   return (
-    <div>
+    <>
       <Card
         className="todoCard"
         sx={{
@@ -28,17 +65,16 @@ export default function Todo({ title, details }) {
             <Grid xs={8}>
               {" "}
               <Typography variant="h5" sx={{ textAlign: "right" }}>
-                {title}
+                {todo.title}
               </Typography>
               <Typography
                 paragraph={true}
-                wrapped
                 style={{
                   textAlign: "right",
                   width: "100% ",
                 }}
               >
-                {details}
+                {todo.details}
               </Typography>
             </Grid>
             <Grid
@@ -47,16 +83,19 @@ export default function Todo({ title, details }) {
               justifyContent="space-around"
               alignItems="center"
             >
+              {/*(CHECK) ICON BUTTON */}
               <IconButton
                 className="iconButton"
                 sx={{
-                  color: "#8bc34a",
-                  background: "white",
+                  color: todo.isCompleted == true ? "#fff" : "#8bc34a",
+                  background: todo.isCompleted == true ? "#8bc34a" : "#fff",
                   border: "3px solid #8bc34a",
                 }}
+                onClick={() => handleCheckClick()}
               >
                 <CheckIcon />
               </IconButton>
+              {/*===== (CHECK) ICON BUTTON ===== */}
               <IconButton
                 className="iconButton"
                 sx={{
@@ -67,8 +106,12 @@ export default function Todo({ title, details }) {
               >
                 <EditIcon />
               </IconButton>
+              {/* DELETE ICON BUTTUN */}
               <IconButton
                 className="iconButton"
+                onClick={() => {
+                  setdeletCheckOpen(true);
+                }}
                 sx={{
                   color: "#b23c17",
                   background: "white",
@@ -77,10 +120,22 @@ export default function Todo({ title, details }) {
               >
                 <DeleteIcon />
               </IconButton>
+              {/* ===== DELETE ICON BUTTUN ===== */}
             </Grid>
           </Grid>
         </CardContent>
       </Card>
-    </div>
+      {/* DELETE DIALOG */}
+      <DeleteCheck
+        open={deletCheckOpen}
+        funOnClase={handleClose}
+        funDelete={handleDeleteConfirm}
+      />
+      {/* ===== DELETE DIALOG ===== */}
+
+      {/* UPDATE DIALOG */}
+      <EditTodo />
+      {/* ===== UPDATE DIALOG ===== */}
+    </>
   );
 }

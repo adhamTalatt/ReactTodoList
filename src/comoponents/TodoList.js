@@ -19,29 +19,17 @@ import Button from "@mui/material/Button";
 
 import { useState } from "react";
 
-const toDoList = [
-  {
-    id: uuidv4(),
-    title: "المهمة الاولي",
-    details: "تفاصيل المهمة الاولي ",
-    isCompleted: false,
-  },
-];
+import { useContext } from "react";
+import { ContextToDoList } from "../contexts/ContextTodoList";
 export default function TodoList() {
-  const [toDos, setToDos] = useState(toDoList);
+  const { toDos, setToDos } = useContext(ContextToDoList);
+
   const [titleInput, setTitleIput] = useState("");
 
-  let showToDos = toDos.map((e) => {
-    return (
-      <Todo
-        key={e.id}
-        title={e.title}
-        details={e.details}
-        isCompleted={e.isCompleted}
-      />
-    );
-  });
+  // START ICONT TASKS
 
+  //ICON TODO  BUTTUN CHECK
+  // ===End ICONT TASKS
   function handleClickbtn() {
     const netTodo = {
       id: uuidv4(),
@@ -52,6 +40,10 @@ export default function TodoList() {
     setToDos([...toDos, netTodo]);
     setTitleIput("");
   }
+
+  let showToDos = toDos.map((e) => {
+    return <Todo key={e.id} todo={e} />;
+  });
 
   return (
     <Container maxWidth="sm">

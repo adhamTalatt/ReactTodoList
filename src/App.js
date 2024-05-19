@@ -2,11 +2,40 @@ import "./App.css";
 import TodoList from "./comoponents/TodoList";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
+import { ContextToDoList } from "./contexts/ContextTodoList";
+import { v4 as uuidv4 } from "uuid";
+import { useState } from "react";
+const toDoList = [
+  {
+    id: uuidv4(),
+    title: "المهمة الاولي",
+    details: "تفاصيل المهمة الاولي ",
+    isCompleted: false,
+  },
+  {
+    id: uuidv4(),
+    title: "المهمة الثانية",
+    details: "تفاصيل المهمة الثانية ",
+    isCompleted: false,
+  },
+  {
+    id: uuidv4(),
+    title: "المهمة الثالثة",
+    details: "تفاصيل المهمة الثالثة ",
+    isCompleted: false,
+  },
+  {
+    id: uuidv4(),
+    title: "المهمة الرابعة",
+    details: "تفاصيل المهمة الرابعة ",
+    isCompleted: false,
+  },
+];
 function App() {
   // create theme in Material Ui for Definition of mian font in ReactTodoList Project
   // this way form Material Ui (Theme) because We Can't put  fonts with  the traditional way in Material
 
+  const [toDos, setToDos] = useState(toDoList);
   const theme = createTheme({
     typography: {
       fontFamily: "Cairo",
@@ -26,7 +55,9 @@ function App() {
           minHeight: "100vh",
         }}
       >
-        <TodoList />
+        <ContextToDoList.Provider value={{ toDos, setToDos }}>
+          <TodoList />
+        </ContextToDoList.Provider>
       </div>
     </ThemeProvider>
   );
