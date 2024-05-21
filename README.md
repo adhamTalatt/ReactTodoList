@@ -3,7 +3,7 @@ build React todo List (Advanced) with material ui
 
 
 
-## packdeg
+### Packages installed within the project
 ---
 ### Material-UI
 npm install @mui/icons-material @mui/material @emotion/styled @emotion/react
