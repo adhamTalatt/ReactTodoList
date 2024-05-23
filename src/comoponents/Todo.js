@@ -100,9 +100,16 @@ export default function Todo({ todo }) {
       >
         <CardContent>
           <Grid container spacing={2}>
-            <Grid xs={8}>
+            <Grid xs={8} className="todoRespo">
               {" "}
-              <Typography variant="h5" sx={{ textAlign: "right" }}>
+              <Typography
+                variant="h5"
+                sx={{
+                  textAlign: "right",
+                  textDecoration:
+                    todo.isCompleted === true ? "line-through" : "none",
+                }}
+              >
                 {todo.title}
               </Typography>
               <Typography
@@ -110,6 +117,8 @@ export default function Todo({ todo }) {
                 style={{
                   textAlign: "right",
                   width: "100% ",
+                  textDecoration:
+                    todo.isCompleted === true ? "line-through" : "none",
                 }}
               >
                 {todo.details}

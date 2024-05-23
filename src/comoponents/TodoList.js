@@ -18,13 +18,11 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
 import { useState, useContext, useEffect } from "react";
-
 import { ContextToDoList } from "../contexts/ContextTodoList";
 export default function TodoList() {
   const { toDos, setToDos } = useContext(ContextToDoList);
-
   const [titleInput, setTitleIput] = useState("");
-
+  const [displayTodosType, setdisplayTodosType] = useState("all");
   // ***** handleAddTodoClick ***** (for add new todo)
   function handleAddTodoClick() {
     const newTodo = {
@@ -49,17 +47,38 @@ export default function TodoList() {
   // useEffect Hook for read todos from locacl Storage
   useEffect(() => {
     const storageTodos = JSON.parse(localStorage.getItem("todos"));
-    console.log(storageTodos);
     if (storageTodos == null) {
       setToDos(toDos);
     } else {
       setToDos(storageTodos);
     }
   }, []);
+  //  ===== useEffect Hook for read todos from locacl Storage =====
 
-  let showToDos = toDos.map((e) => {
+  // ***** filter for show data taggle btton *****
+  function dispalyedTodosType(e) {
+    setdisplayTodosType(e.target.value);
+  }
+  const completedTodos = toDos.filter((t) => {
+    return t.isCompleted;
+  });
+  const notCompletedTodos = toDos.filter((t) => {
+    return !t.isCompleted;
+  });
+
+  let todoToBeRenfered = toDos;
+  if (displayTodosType === "non-completed") {
+    todoToBeRenfered = notCompletedTodos;
+  } else if (displayTodosType === "completed") {
+    todoToBeRenfered = completedTodos;
+  } else {
+    todoToBeRenfered = toDos;
+  }
+  let showToDos = todoToBeRenfered.map((e) => {
     return <Todo key={e.id} todo={e} />;
   });
+  // ===== filter for show data ====
+
   return (
     <Container maxWidth="sm">
       <Card sx={{ minWidth: 275 }}>
@@ -74,19 +93,20 @@ export default function TodoList() {
           {/*  Start Toggle Button */}
           <ToggleButtonGroup
             style={{ direction: "ltr", marginTop: "30px" }}
-            value={""}
+            value={displayTodosType}
             exclusive
-            onChange={() => {}}
+            onChange={dispalyedTodosType}
             aria-label="text alignment"
+            color="primary"
           >
-            <ToggleButton value="right"> غير منجز</ToggleButton>
-            <ToggleButton value="center">المنجز</ToggleButton>
-            <ToggleButton value="left"> الكل </ToggleButton>
+            <ToggleButton value="non-completed"> غير منجز</ToggleButton>
+            <ToggleButton value="completed">المنجز</ToggleButton>
+            <ToggleButton value="all"> الكل </ToggleButton>
           </ToggleButtonGroup>
           {/* ====== End Toggle Button */}
 
           {/* Start ALL TODOS */}
-          {showToDos}
+          <div className="showdata">{showToDos}</div>
           {/* ====== End ALL TODOS */}
 
           {/* ====== Start ADD TO DO*/}
@@ -112,6 +132,8 @@ export default function TodoList() {
                   height: "100%",
                   width: "100%",
                 }}
+                color="primary"
+                disabled={titleInput <= 0}
               >
                 اضافة
               </Button>

@@ -14,6 +14,11 @@ function App() {
     typography: {
       fontFamily: "Cairo",
     },
+    palette: {
+      primary: {
+        main: "#546e7a",
+      },
+    },
   });
   return (
     <ThemeProvider theme={theme}>

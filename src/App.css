@@ -56,3 +56,30 @@
   font-weight: 200;
 }
 /* =====END CUSTOM FONTS ====== */
+.showdata {
+  max-height: 55vh;
+  overflow: scroll;
+  overflow-x: hidden;
+  padding: 3px;
+}
+
+.showdata::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+.showdata::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+/* Handle */
+.showdata::-webkit-scrollbar-thumb {
+  background: #283593;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+.showdata::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
