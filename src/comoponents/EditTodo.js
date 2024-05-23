@@ -1,59 +1,57 @@
-import { useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-export default function EditTodo() {
-  const [open, setOpen] = useState(true);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+export default function EditTodo({
+  open,
+  closefun,
+  editValueRead,
+  editValuefunTitle,
+  editValuefunDetails,
+  funEditConfirm,
+}) {
   const handleClose = () => {
-    setOpen(false);
+    closefun();
   };
+  // console.log(editValueRead.title);
   return (
     <>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        PaperProps={{
-          component: "form",
-          onSubmit: (event) => {
-            event.preventDefault();
-            const formData = new FormData(event.currentTarget);
-            const formJson = Object.fromEntries(formData.entries());
-            const email = formJson.email;
-            console.log(email);
-            handleClose();
-          },
-        }}
-      >
-        <DialogTitle>Subscribe</DialogTitle>
+      <Dialog style={{ direction: "rtl" }} open={open} onClose={handleClose}>
+        <DialogTitle>تحديث المهامة</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            To subscribe to this website, please enter your email address here.
-            We will send updates occasionally.
-          </DialogContentText>
+          {/* <DialogContentText> */}
+          {/* To subscribe to this website, please enter your email address here. */}
+          {/* We will send updates occasionally. */}
+          {/* </DialogContentText> */}
           <TextField
-            autoFocus
             required
             margin="dense"
-            id="name"
-            name="email"
-            label="Email Address"
-            type="email"
+            onChange={(event) => {
+              editValuefunTitle(event.target.value);
+            }}
+            label="اسم المهمة"
             fullWidth
             variant="standard"
+            value={editValueRead.title}
+          />
+          <TextField
+            required
+            margin="dense"
+            onChange={(event) => {
+              editValuefunDetails(event.target.value);
+            }}
+            label="تفاصيل المهمة"
+            fullWidth
+            variant="standard"
+            value={editValueRead.details}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Subscribe</Button>
+          <Button onClick={funEditConfirm}>تحديث</Button>
+          <Button onClick={handleClose}>اغلاق</Button>
         </DialogActions>
       </Dialog>
     </>

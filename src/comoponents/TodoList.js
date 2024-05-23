@@ -17,34 +17,49 @@ import Grid from "@mui/material/Unstable_Grid2";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 
-import { useContext } from "react";
 import { ContextToDoList } from "../contexts/ContextTodoList";
 export default function TodoList() {
   const { toDos, setToDos } = useContext(ContextToDoList);
 
   const [titleInput, setTitleIput] = useState("");
 
-  // START ICONT TASKS
-
-  //ICON TODO  BUTTUN CHECK
-  // ===End ICONT TASKS
-  function handleClickbtn() {
-    const netTodo = {
+  // ***** handleAddTodoClick ***** (for add new todo)
+  function handleAddTodoClick() {
+    const newTodo = {
       id: uuidv4(),
       title: titleInput,
       details: "",
       isCompleted: false,
     };
-    setToDos([...toDos, netTodo]);
+
+    const upDateTODO = [...toDos, newTodo];
+    setToDos(upDateTODO);
+
+    // for add toDos object in locacl Storage Receives
+    // setItem Receives parameters (key ,value)
+    // we should convert toDos form array to string because locacl Storage do not understand  array  or anything  it understand  string value only
+    // we used JSON.stringify() for convert toDos from array to string
+    localStorage.setItem("todos", JSON.stringify(upDateTODO));
     setTitleIput("");
   }
+  // ===== handleAddTodoClick =====
+
+  // useEffect Hook for read todos from locacl Storage
+  useEffect(() => {
+    const storageTodos = JSON.parse(localStorage.getItem("todos"));
+    console.log(storageTodos);
+    if (storageTodos == null) {
+      setToDos(toDos);
+    } else {
+      setToDos(storageTodos);
+    }
+  }, []);
 
   let showToDos = toDos.map((e) => {
     return <Todo key={e.id} todo={e} />;
   });
-
   return (
     <Container maxWidth="sm">
       <Card sx={{ minWidth: 275 }}>
@@ -90,7 +105,7 @@ export default function TodoList() {
             <Grid xs={4}>
               <Button
                 onClick={() => {
-                  handleClickbtn();
+                  handleAddTodoClick();
                 }}
                 variant="contained"
                 style={{

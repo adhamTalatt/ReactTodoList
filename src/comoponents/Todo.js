@@ -19,33 +19,71 @@ import { useState } from "react";
 import DeleteCheck from "./DeleteCheck";
 import EditTodo from "./EditTodo";
 export default function Todo({ todo }) {
+  // ***** React Hooks *****
   const { toDos, setToDos } = useContext(ContextToDoList);
   const [deletCheckOpen, setdeletCheckOpen] = useState(false);
-
+  const [editTodo, seteditTodo] = useState(false);
+  const [editTodoValue, setEditTodoValue] = useState({
+    title: todo.title,
+    details: todo.details,
+  });
+  // ===== React Hooks =====
   // Handle Event Functions
+  function handleEditebutten() {
+    seteditTodo(true);
+  }
+  function handleEditeValueDetails(eventValue) {
+    setEditTodoValue({ ...editTodoValue, details: eventValue });
+  }
+  function handleEditeValueTitle(eventValue) {
+    setEditTodoValue({ ...editTodoValue, title: eventValue });
+  }
+  function handleEditeClose() {
+    seteditTodo(false);
+  }
+  function handleEditeConfirm() {
+    const updateTodo = toDos.map((t) => {
+      if (t.id === todo.id) {
+        return {
+          ...t,
+          title: editTodoValue.title,
+          details: editTodoValue.details,
+        };
+      } else {
+        return t;
+      }
+    });
+    setToDos(updateTodo);
+    localStorage.setItem("todos", JSON.stringify(updateTodo));
+    handleEditeClose();
+  }
 
-  function handleClose() {
+  function handleDeleteClose() {
     setdeletCheckOpen(false);
   }
   function handleDeleteConfirm() {
     const updatedTodo = toDos.filter((t) => {
-      if (t.id == todo.id) {
+      if (t.id === todo.id) {
         return false;
       } else {
         return true;
       }
     });
     setToDos(updatedTodo);
+
+    localStorage.setItem("todos", JSON.stringify(updatedTodo));
   }
   function handleCheckClick() {
     const udatedTodos = toDos.map((e) => {
-      if (e.id == todo.id) {
+      if (e.id === todo.id) {
         e.isCompleted = !e.isCompleted;
       }
       return e;
     });
 
     setToDos(udatedTodos);
+
+    localStorage.setItem("todos", JSON.stringify(udatedTodos));
   }
   // ======= Handle Event Functions ======
 
@@ -87,8 +125,8 @@ export default function Todo({ todo }) {
               <IconButton
                 className="iconButton"
                 sx={{
-                  color: todo.isCompleted == true ? "#fff" : "#8bc34a",
-                  background: todo.isCompleted == true ? "#8bc34a" : "#fff",
+                  color: todo.isCompleted === true ? "#fff" : "#8bc34a",
+                  background: todo.isCompleted === true ? "#8bc34a" : "#fff",
                   border: "3px solid #8bc34a",
                 }}
                 onClick={() => handleCheckClick()}
@@ -96,6 +134,8 @@ export default function Todo({ todo }) {
                 <CheckIcon />
               </IconButton>
               {/*===== (CHECK) ICON BUTTON ===== */}
+
+              {/* (EDITE) ICON BUTTON */}
               <IconButton
                 className="iconButton"
                 sx={{
@@ -103,9 +143,13 @@ export default function Todo({ todo }) {
                   background: "white",
                   border: "3px solid #1769aa",
                 }}
+                onClick={handleEditebutten}
               >
                 <EditIcon />
               </IconButton>
+
+              {/* ===== (EDITE) ICON BUTTON ===== */}
+
               {/* DELETE ICON BUTTUN */}
               <IconButton
                 className="iconButton"
@@ -125,16 +169,28 @@ export default function Todo({ todo }) {
           </Grid>
         </CardContent>
       </Card>
+
       {/* DELETE DIALOG */}
+
+      {/* ***** DELETE DIALOG ***** */}
       <DeleteCheck
         open={deletCheckOpen}
-        funOnClase={handleClose}
+        funOnClase={handleDeleteClose}
         funDelete={handleDeleteConfirm}
       />
       {/* ===== DELETE DIALOG ===== */}
 
       {/* UPDATE DIALOG */}
-      <EditTodo />
+
+      {/* ***** UPDATE DIALOG ***** */}
+      <EditTodo
+        open={editTodo}
+        editValueRead={editTodoValue}
+        closefun={handleEditeClose}
+        editValuefunTitle={handleEditeValueTitle}
+        editValuefunDetails={handleEditeValueDetails}
+        funEditConfirm={handleEditeConfirm}
+      />
       {/* ===== UPDATE DIALOG ===== */}
     </>
   );
