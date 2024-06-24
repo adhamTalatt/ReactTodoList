@@ -57,7 +57,7 @@
 }
 /* =====END CUSTOM FONTS ====== */
 .showdata {
-  max-height: 55vh;
+  max-height: 50vh;
   overflow: scroll;
   overflow-x: hidden;
   padding: 3px;
