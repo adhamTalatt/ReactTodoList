@@ -23,12 +23,17 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
+import Textarea from "@mui/joy/Textarea";
+
 import { useState, useContext, useEffect, useMemo } from "react";
-import { ContextToDoList } from "../contexts/ContextTodoList";
+import { useTodo } from "../contexts/ContextTodoList";
 import { ToastContext } from "../contexts/ToastContext";
 
 export default function TodoList() {
-  const { toDos, setToDos } = useContext(ContextToDoList);
+  // const { toDos2, setToDos } = useContext(ContextToDoList);
+
+  const { toDos, dispatch } = useTodo();
+
   const { handleToast } = useContext(ToastContext);
 
   // ====Input State====
@@ -49,21 +54,12 @@ export default function TodoList() {
   const [searchInput, setSearchInput] = useState("");
   // ***** handleAddTodoClick ***** (for add new todo)
   function handleAddTodoClick() {
-    const newTodo = {
-      id: uuidv4(),
-      title: titleInput,
-      details: "",
-      isCompleted: false,
-    };
-
-    const upDateTODO = [...toDos, newTodo];
-    setToDos(upDateTODO);
-
-    // for add toDos object in locacl Storage Receives
-    // setItem Receives parameters (key ,value)
-    // we should convert toDos form array to string because locacl Storage do not understand  array  or anything  it understand  string value only
-    // we used JSON.stringify() for convert toDos from array to string
-    localStorage.setItem("todos", JSON.stringify(upDateTODO));
+    dispatch({
+      type: "added",
+      payload: {
+        newTitle: titleInput,
+      },
+    });
     setTitleIput("");
     handleToast(".تم انشاء ماهمه جديده");
   }
@@ -71,12 +67,9 @@ export default function TodoList() {
 
   // useEffect Hook for read todos from locacl Storage
   useEffect(() => {
-    const storageTodos = JSON.parse(localStorage.getItem("todos"));
-    if (storageTodos == null) {
-      setToDos(toDos);
-    } else {
-      setToDos(storageTodos);
-    }
+    dispatch({
+      type: "read",
+    });
   }, []);
   //  ===== useEffect Hook for read todos from locacl Storage =====
 
@@ -85,7 +78,6 @@ export default function TodoList() {
     setdisplayTodosType(e.target.value);
   }
 
-  console.log(searchInput);
   const completedTodos = useMemo(() => {
     return toDos.filter((t) => {
       return t.isCompleted;
@@ -116,22 +108,18 @@ export default function TodoList() {
   function handleDeleteClose() {
     setdeletCheckOpen(false);
   }
-  let todoDialog = null;
+  // let todoDialog = null;
   function showDeleteDialog(todo) {
     setDialogToDo(todo);
     setdeletCheckOpen(true);
   }
   function handleDeleteConfirm() {
-    console.log(todoDialog);
-    const updatedTodo = toDos.filter((t) => {
-      if (t.id === DialogToDo.id) {
-        return false;
-      } else {
-        return true;
-      }
+    dispatch({
+      type: "delete",
+      payload: {
+        DialogToDoID: DialogToDo.id,
+      },
     });
-    setToDos(updatedTodo);
-    localStorage.setItem("todos", JSON.stringify(updatedTodo));
     handleToast("تم حذف المهامة");
     handleDeleteClose();
   }
@@ -150,23 +138,44 @@ export default function TodoList() {
     seteditTodo(false);
   }
   function handleEditeConfirm() {
-    const updateTodo = toDos.map((t) => {
-      if (t.id === editTodoValue.id) {
-        return {
-          ...t,
-          title: editTodoValue.title,
-          details: editTodoValue.details,
-        };
-      } else {
-        return t;
-      }
+    dispatch({
+      type: "update",
+      payload: {
+        todoValueId: editTodoValue.id,
+        editTitle: editTodoValue.title,
+        editDetails: editTodoValue.details,
+      },
     });
-    setToDos(updateTodo);
-    localStorage.setItem("todos", JSON.stringify(updateTodo));
     handleToast("تم التعديل علي المهامة");
     seteditTodo(false);
   }
   // ==end=>==editeDeilogFunction======
+
+  // ===============input search condetion =======
+  const searchBoxCondonent = () => {
+    return (
+      <div
+        style={{
+          marginTop: "5%",
+          marginLeft: "10%",
+          marginRight: "10%",
+          marginBottom: "5%",
+          direction: "rtl",
+        }}
+      >
+        <TextField
+          fullWidth
+          id="standard-basic"
+          placeholder=" بحث عن مهامي ... "
+          variant="outlined"
+          onChange={(e) => {
+            setSearchInput(e.target.value);
+          }}
+        />
+      </div>
+    );
+  };
+
   let showToDos = searchWithTitle.map((e) => {
     return (
       <Todo
@@ -204,25 +213,7 @@ export default function TodoList() {
             </ToggleButtonGroup>
             {/* ====== End Toggle Button */}
             {/*start search input  */}
-            <div
-              style={{
-                marginTop: "5%",
-                marginLeft: "10%",
-                marginRight: "10%",
-                marginBottom: "5%",
-                direction: "rtl",
-              }}
-            >
-              <TextField
-                fullWidth
-                id="standard-basic"
-                placeholder=" بحث عن مهامي ... "
-                variant="outlined"
-                onChange={(e) => {
-                  setSearchInput(e.target.value);
-                }}
-              />
-            </div>
+            {toDos.length >= 3 ? searchBoxCondonent() : ""}
             {/*end search input  */}
             {/* Start ALL TODOS */}
             <div className="showdata">{showToDos}</div>
@@ -311,7 +302,6 @@ export default function TodoList() {
             value={editTodoValue.title}
           />
           <TextField
-            required
             margin="dense"
             onChange={(event) => {
               handleEditeValueDetails(event.target.value);
@@ -320,6 +310,8 @@ export default function TodoList() {
             fullWidth
             variant="standard"
             value={editTodoValue.details}
+            multiline
+            maxRows={3}
           />
         </DialogContent>
         <DialogActions>

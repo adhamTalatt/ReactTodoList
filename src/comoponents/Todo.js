@@ -14,36 +14,34 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 
 //Context
-import { useContext } from "react";
-import { ContextToDoList } from "../contexts/ContextTodoList";
+import { useContext, useReducer } from "react";
+import { useTodo } from "../contexts/ContextTodoList";
 import { useToast } from "../contexts/ToastContext";
-
+import todoReducer from "../reducers/todoReducer";
 import ShowTODOFull from "./ShowTODOFull";
 
 //
 export default function Todo({ todo, showDelete, showEdite }) {
   // ***** React Hooks *****
-  const { toDos, setToDos } = useContext(ContextToDoList);
+  // const { toDos, setToDos } = useContext(ContextToDoList);
+  const { toDos, dispatch } = useTodo();
   const { handleToast } = useToast();
   const [openDetails, setOpenDetails] = useState(false);
   // ===== React Hooks =====
   // Handle Event Functions
 
   function handleCheckClick() {
-    const udatedTodos = toDos.map((e) => {
-      if (e.id === todo.id) {
-        e.isCompleted = !e.isCompleted;
-        e.isCompleted === true
-          ? handleToast("تم النتهاء من المهمة ")
-          : handleToast(" لم يبتم الانتهاء من المهمة بعد");
-      }
-      return e;
+    dispatch({
+      type: "toggledCompleted",
+      payload: {
+        id: todo.id,
+      },
     });
-
-    setToDos(udatedTodos);
-
-    localStorage.setItem("todos", JSON.stringify(udatedTodos));
+    todo.isCompleted === true
+      ? handleToast("تم النتهاء من المهمة ")
+      : handleToast(" لم يبتم الانتهاء من المهمة بعد");
   }
+
   // ======= Handle Event Functions ======
   const detailsSlice =
     todo.details.length >= 30

@@ -2,17 +2,13 @@ import "./App.css";
 import TodoList from "./comoponents/TodoList";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { ContextToDoList } from "./contexts/ContextTodoList";
-import { useState } from "react";
+import ContextTodo from "./contexts/ContextTodoList";
 
 import { TosatProvider } from "./contexts/ToastContext";
 
-const toDoList = [];
 function App() {
   // create theme in Material Ui for Definition of mian font in ReactTodoList Project
   // this way form Material Ui (Theme) because We Can't put  fonts with  the traditional way in Material
-
-  const [toDos, setToDos] = useState(toDoList);
 
   const theme = createTheme({
     typography: {
@@ -26,24 +22,24 @@ function App() {
   });
   return (
     <ThemeProvider theme={theme}>
-      <TosatProvider>
-        <div
-          className="App"
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100%",
-            background: "#191b1f",
-            direction: "rtl",
-            minHeight: "100vh",
-          }}
-        >
-          <ContextToDoList.Provider value={{ toDos, setToDos }}>
+      <ContextTodo>
+        <TosatProvider>
+          <div
+            className="App"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+              background: "#191b1f",
+              direction: "rtl",
+              minHeight: "100vh",
+            }}
+          >
             <TodoList />
-          </ContextToDoList.Provider>
-        </div>
-      </TosatProvider>
+          </div>
+        </TosatProvider>
+      </ContextTodo>
     </ThemeProvider>
   );
 }
